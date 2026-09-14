@@ -25,20 +25,43 @@ VALUES (8, 8999.00, 'UPI', '2025-09-12', '12:05:00', 'Pending');
 -- ===============================================================================================================
 -- SELECT
 -- All customers
-SELECT * FROM Customer;
+SELECT * 
+FROM Customer;
+
 
 -- Products with price > 5000
-SELECT ProductID, Name, Price, Stock 
+SELECT 
+    ProductID,
+    Name,
+    Price,
+    Stock 
 FROM Product 
 WHERE Price > 5000
 ORDER BY Price DESC;
 
+
 -- Orders of a specific customer
-SELECT * FROM "Order" 
+SELECT 
+    OrderID,
+    CustomerID,
+    TO_CHAR(OrderDate, 'DD-MM-YYYY') AS OrderDate,
+    OrderTime,
+    Status,
+    TotalAmount
+FROM "Order" 
 WHERE CustomerID = 1;
 
+
 -- Pending payments
-SELECT * FROM Payment 
+SELECT 
+    PaymentID,
+    OrderID,
+    Amount,
+    Method,
+    TO_CHAR(PaymentDate, 'DD-MM-YYYY') AS PaymentDate,
+    PaymentTime,
+    Status
+FROM Payment 
 WHERE Status = 'Pending';
 -- ====================================================================================================================
 -- UPDATE
