@@ -3,16 +3,17 @@
 -- Returns only matching rows from both tables
 -- =====================================================
 
--- Orders with Customer details (only customers who have orders)
+-- Orders with Customer details
 SELECT 
     o.OrderID,
     c.Name AS CustomerName,
     c.Email,
-    o.OrderDate,
+    TO_CHAR(o.OrderDate, 'DD-MM-YYYY') AS OrderDate,
     o.Status,
     o.TotalAmount
 FROM "Order" o
-INNER JOIN Customer c ON o.CustomerID = c.CustomerID;
+INNER JOIN Customer c 
+    ON o.CustomerID = c.CustomerID;
 
 
 -- Order Items with Product name
@@ -24,8 +25,10 @@ SELECT
     oi.UnitPrice,
     (oi.Quantity * oi.UnitPrice) AS LineTotal
 FROM OrderItem oi
-INNER JOIN "Order" o ON oi.OrderID = o.OrderID
-INNER JOIN Product p ON oi.ProductID = p.ProductID;
+INNER JOIN "Order" o 
+    ON oi.OrderID = o.OrderID
+INNER JOIN Product p 
+    ON oi.ProductID = p.ProductID;
 
 
 -- =====================================================
@@ -33,26 +36,29 @@ INNER JOIN Product p ON oi.ProductID = p.ProductID;
 -- Returns all rows from left table + matching from right
 -- =====================================================
 
--- All Customers and their Orders (customers with no orders also appear)
+-- All Customers and their Orders
 SELECT 
     c.CustomerID,
     c.Name AS CustomerName,
     o.OrderID,
+    TO_CHAR(o.OrderDate, 'DD-MM-YYYY') AS OrderDate,
     o.TotalAmount,
     o.Status
 FROM Customer c
-LEFT JOIN "Order" o ON c.CustomerID = o.CustomerID
+LEFT JOIN "Order" o 
+    ON c.CustomerID = o.CustomerID
 ORDER BY c.CustomerID;
 
 
--- All Products with Category (even if category is missing)
+-- All Products with Category
 SELECT 
     p.ProductID,
     p.Name AS ProductName,
     p.Price,
     c.CategoryName
 FROM Product p
-LEFT JOIN Category c ON p.CategoryID = c.CategoryID;
+LEFT JOIN Category c 
+    ON p.CategoryID = c.CategoryID;
 
 
 -- =====================================================
@@ -64,11 +70,12 @@ LEFT JOIN Category c ON p.CategoryID = c.CategoryID;
 SELECT 
     c.Name AS CustomerName,
     o.OrderID,
-    o.OrderDate,
+    TO_CHAR(o.OrderDate, 'DD-MM-YYYY') AS OrderDate,
     o.Status,
     o.TotalAmount
 FROM Customer c
-RIGHT JOIN "Order" o ON c.CustomerID = o.CustomerID;
+RIGHT JOIN "Order" o 
+    ON c.CustomerID = o.CustomerID;
 
 
 -- All Categories and Products under them
@@ -77,7 +84,8 @@ SELECT
     p.Price,
     c.CategoryName
 FROM Product p
-RIGHT JOIN Category c ON p.CategoryID = c.CategoryID;
+RIGHT JOIN Category c 
+    ON p.CategoryID = c.CategoryID;
 
 
 -- =====================================================
@@ -85,13 +93,15 @@ RIGHT JOIN Category c ON p.CategoryID = c.CategoryID;
 -- Automatically joins on columns with same name
 -- =====================================================
 
--- Natural Join between Order and Payment (both have OrderID)
+-- Natural Join between Order and Payment
+-- Both have OrderID
 SELECT *
 FROM "Order"
 NATURAL JOIN Payment;
 
 
--- Natural Join between Product and OrderItem (both have ProductID)
+-- Natural Join between Product and OrderItem
+-- Both have ProductID
 SELECT *
 FROM Product
 NATURAL JOIN OrderItem;
@@ -99,19 +109,20 @@ NATURAL JOIN OrderItem;
 
 -- =====================================================
 -- 5. FULL OUTER JOIN
--- Returns all rows from both tables (matched + unmatched)
+-- Returns all rows from both tables
 -- =====================================================
 
--- All Customers and all Orders (shows customers without orders 
--- and orders without customers if any)
+-- All Customers and all Orders
 SELECT 
     c.CustomerID,
     c.Name AS CustomerName,
     o.OrderID,
+    TO_CHAR(o.OrderDate, 'DD-MM-YYYY') AS OrderDate,
     o.TotalAmount,
     o.Status
 FROM Customer c
-FULL OUTER JOIN "Order" o ON c.CustomerID = o.CustomerID
+FULL OUTER JOIN "Order" o 
+    ON c.CustomerID = o.CustomerID
 ORDER BY c.CustomerID, o.OrderID;
 
 
@@ -122,4 +133,5 @@ SELECT
     oi.OrderItemID,
     oi.Quantity
 FROM Product p
-FULL OUTER JOIN OrderItem oi ON p.ProductID = oi.ProductID;
+FULL OUTER JOIN OrderItem oi 
+    ON p.ProductID = oi.ProductID;
